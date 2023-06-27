@@ -15,18 +15,19 @@ model User {
   avatar_url String?
   created_at DateTime @default(now())
 
-  Account Account[]
-  Session Session[]
+  Account       Account[]
+  Session       Session[]
+  timeIntervals UserTimeInterval[]
 
   @@map("users")
 }
 
 model Account {
   id                  String  @id @default(cuid())
-  user_id             String
+  user_id             String  @map("user_id")
   type                String
   provider            String
-  provider_account_id String
+  provider_account_id String  @map("provider_account_id")
   refresh_token       String?
   access_token        String?
   expires_at          Int?
@@ -48,4 +49,16 @@ model Session {
   user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model UserTimeInterval {
+  id                    String @id @default(uuid())
+  week_day              Int
+  time_start_in_minutes Int
+  time_end_in_minutes   Int
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("user_time_intervals")
 }
