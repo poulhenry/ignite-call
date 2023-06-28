@@ -1,14 +1,14 @@
 import PrismaAdapter from '@/libs/auth/prisma-adapter'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 
 export function buildNextAuthOptions(
-  res: NextApiRequest,
-  req: NextApiResponse,
+  req: NextApiResponse | NextPageContext['req'],
+  res: NextApiRequest | NextPageContext['res'],
 ): NextAuthOptions {
   return {
-    adapter: PrismaAdapter(res, req),
+    adapter: PrismaAdapter(req, res),
     providers: [
       GoogleProvider({
         clientId: process.env.GOOGLE_ID_CLIENT ?? '',
